@@ -1,0 +1,52 @@
+Логика игры определена в классе верхнего уровня GuessNumberGame.cs, который реализует интерфейс IGame.cs
+
+Принципы SOLID:
+
+1)	SRP:
+	Каждый реализованный класс выполняет одну единственную задачу:
+	 - ConsoleInformation.cs отвечает за вывод информации на консоль;
+	 - ConsoleInputSettings.cs отвечает за настройку игры через консоль;
+	 - ConsolePlayProcess.cs отвечает за игровой процесс через консоль;
+	 - RandomNumberGenerator.cs отвечает за генерацию случайных чисел в заданном диапозоне;
+	В классе GuessNumberGame.cs каждый метод тоже выполняет единственную ответственность:
+	 - void Start() запускает игровой процесс (логику мгры);
+	 - void Stop() выводит результат игры;
+	 - void ApplySettings() устанавливает настройки игры;
+
+2)	OCP:
+	В программе все классы реализуют определенные интерфейсы и это позволяет придерживаться принципа OCP.
+	Например, интерфейс IGame, в котором есть основные методы void Start() и void Stop(). Этот интерфейс реализует 
+	класс GuessNumberGame.cs и расширяет возможности добавлением метода void ApplySettings().
+
+3)	LSP:
+	В конструктор класса GuessNumberGame.cs передаются имплементации конкретных интерфейсов:
+	Конструктор:
+		public GuessNumberGame(
+			ISettingsReader<Dictionary<string, int>> settingsReader, 
+			INumberGenerator generatedNumber, 
+			IPlayProcess playProcess, 
+			IInformation information)
+
+	Конкретное применение:
+		GuessNumberGame Game = new GuessNumberGame(
+			new ConsoleInputSettings(), 
+			new RandomNumberGenerator(), 
+			new ConsolePlayProcess(), 
+			new ConsoleInformation());
+	
+	Предусловия, постусловия и инвариантность не применены и соответственно не нарушены
+
+4)	ISP:
+	 - В программе отсутсвуют большие интрефейсы(в интерфейсах можно встретить максимум по два метода);
+	 - Отсутсвуют методы без реализации;
+
+5)	DIP:
+	Класс верхнего уровня GuessNumberGame.cs взаимодействует с классами нижнего уровня (ConsoleInformation.cs, ConsoleInputSettings.cs,
+	ConsolePlayProcess.cs, RandomNumberGenerator.cs) через абстракции (IInformation.cs, ISettingsReader.cs, IPlayProcess.cs,
+	INumberGenerator.cs). 
+	Конструктор:
+		public GuessNumberGame(
+			ISettingsReader<Dictionary<string, int>> settingsReader, 
+			INumberGenerator generatedNumber, 
+			IPlayProcess playProcess, 
+			IInformation information)
